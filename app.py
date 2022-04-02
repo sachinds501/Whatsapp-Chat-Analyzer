@@ -1,3 +1,4 @@
+import pandas as pd
 import streamlit as st
 
 import helper
@@ -62,3 +63,11 @@ if uploaded_file is not None:
         fig, ax = plt.subplots()
         ax.imshow(df_wc)
         st.pyplot(fig)
+
+
+        # most common words
+        st.title('Most used Words')
+        most_common_df = helper.most_common_words(selected_user,df)
+
+        st.dataframe(most_common_df)
+

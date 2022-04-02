@@ -1,5 +1,8 @@
 from urlextract import URLExtract
 from wordcloud import WordCloud
+import pandas as pd
+from collections import Counter
+
 extract = URLExtract()
 
 
@@ -31,12 +34,41 @@ def most_busy_users(df):
     return x, df
 
 
-def create_worldcloud(selected_users,df):
+def create_worldcloud(selected_user, df):
 
-    if selected_users != 'Overall':
-        df = df[df['user'] == selected_users]
+    f = open('hinglish.txt', 'r')
+    stop_words = f.read()
 
-    wc = WordCloud(width=500,height=500,min_font_size=10,background_color='white')
+    if selected_user != 'Overall':
+        df = df[df['user'] == selected_user]
+
+    wc = WordCloud(width=500, height=500, min_font_size=10, background_color='white')
     df_wc = wc.generate(df['message'].str.cat(sep=" "))
     return df_wc
 
+
+def most_common_words(selected_user, df):
+    f = open('hinglish.txt', 'r')
+    stop_words = f.read()
+
+    if selected_user != 'Overall':
+        df = df[df['user'] == selected_user]
+
+    temp = df[df['user'] != 'group_notification']
+    temp = temp[temp['message'] != '<Media omitted>\n']
+
+    punc = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
+    words = []
+
+    for letter in temp['message']:
+        if letter in punc:
+            temp['message'] = temp['message'].replace(letter, "")
+
+    for message in temp['message']:
+        for word in message.lower().split():
+            if word not in stop_words and word.isalpha():
+                words.append(word)
+
+    most_common_df = pd.DataFrame(Counter(words).most_common(20))
+
+    return most_common_df
