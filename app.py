@@ -4,7 +4,7 @@ import streamlit as st
 import helper
 import preprocessor
 import matplotlib.pyplot as plt
-import  seaborn as sns
+import seaborn as sns
 
 st.sidebar.title("Whatsapp Chat Analyzer")
 
@@ -27,7 +27,7 @@ if uploaded_file is not None:
         # Stats Area
         num_messages, words, num_media_messages, num_links = helper.fetch_stats(selected_user, df)
 
-        st.title("Top Statastics")
+        st.title("Top Statistics")
         col1, col2, col3, col4 = st.columns(4)
 
         with col1:
@@ -44,10 +44,10 @@ if uploaded_file is not None:
             st.title(num_links)
 
         # monthly timeline
-        timeline = helper.monthly_timeline(selected_user,df)
+        timeline = helper.monthly_timeline(selected_user, df)
         st.title('Monthly Timeline')
         fig, ax = plt.subplots()
-        plt.plot(timeline['time'], timeline['message'],color='green')
+        plt.plot(timeline['time'], timeline['message'], color='green')
         plt.xticks(rotation='vertical')
         st.pyplot(fig)
 
@@ -62,25 +62,25 @@ if uploaded_file is not None:
         # weekly activity
         st.title('Activity Map')
 
-        col1,col2 = st.columns(2)
+        col1, col2 = st.columns(2)
 
-        with col1 :
+        with col1:
             st.header("Most Busy Day")
             busy_day = helper.week_activity_map(selected_user, df)
-            fig,ax = plt.subplots()
+            fig, ax = plt.subplots()
             ax.bar(busy_day.index, busy_day.values)
             plt.xticks(rotation='vertical')
             st.pyplot(fig)
 
-        with col2 :
+        with col2:
             st.header("Most Busy Month")
             busy_month = helper.month_activity_map(selected_user, df)
-            fig,ax = plt.subplots()
-            ax.bar(busy_month.index, busy_month.values, color = 'orange')
+            fig, ax = plt.subplots()
+            ax.bar(busy_month.index, busy_month.values, color='orange')
             plt.xticks(rotation='vertical')
             st.pyplot(fig)
 
-        # Weekly hours activity map
+        # Weekly hours' activity map
         st.title('Weekly Hours Activity Map')
         user_heatmap = helper.activity_heatmap(selected_user, df)
         fig, ax = plt.subplots()
@@ -110,19 +110,18 @@ if uploaded_file is not None:
         ax.imshow(df_wc)
         st.pyplot(fig)
 
-
         # most common words
         st.title('Most used Words')
-        most_common_df = helper.most_common_words(selected_user,df)
+        most_common_df = helper.most_common_words(selected_user, df)
 
         fig, ax = plt.subplots()
 
-        ax.barh(most_common_df[0],most_common_df[1])
+        ax.barh(most_common_df[0], most_common_df[1])
         plt.xticks(rotation='vertical')
 
         st.pyplot(fig)
 
-        #emoji analysis
+        # emoji analysis
         emoji_df = helper.emoji_helper(selected_user, df)
         st.title("Emoji Analysis")
 
