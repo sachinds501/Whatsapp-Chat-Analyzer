@@ -30,10 +30,10 @@ def fetch_stats(selected_user, df):
 
 
 def most_busy_users(df):
-    x = df['user'].value_counts().head()
+    x = df['user'].value_counts().head(15)
     df = round((df['user'].value_counts() / df.shape[0]) * 100, 2).reset_index().rename(
-        columns={'index': 'name', 'user': 'percent'})
-    return x, df
+        columns={'index': 'Name', 'user': 'Percentage'})
+    return x, df 
 
 
 def create_worldcloud(selected_user, df):
