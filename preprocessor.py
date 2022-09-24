@@ -1,6 +1,7 @@
 import re
 import pandas as pd
-
+import app
+from datetime import datetime
 
 def preprocess(data):
     pattern = '\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{2}\s-\s'
@@ -8,9 +9,19 @@ def preprocess(data):
     messages = re.split(pattern, data)[1:]
     dates = re.findall(pattern, data)
 
-    df = pd.DataFrame({'user_message': messages, 'message_date': dates})
-    # convert message_date type
-    df['message_date'] = pd.to_datetime(df['message_date'], format='%m/%d/%y, %H:%M - ')
+
+
+    new_dates = []
+    for time_format in dates:
+        new_format = time_format.split(', ')
+        in_time = datetime.strptime(new_format[1], "%I:%M %p - ")
+        out_time = datetime.strftime(in_time, "%H:%M - ")
+        new_format[1] = str(out_time)
+        new_dates.append(", ".join(new_format))
+    df = pd.DataFrame({'user_message': messages, 'message_date': new_dates})
+    # if selected_format == 'dd/mm/yy - HH:MM 24 hours' :
+        # convert message_date type
+    df['message_date'] = pd.to_datetime(df['message_date'], format='%d/%m/%Y, %H:%M - ')
 
     df.rename(columns={'message_date': 'date'}, inplace=True)
 

@@ -23,6 +23,9 @@ if uploaded_file is not None:
     data = bytes_data.decode("utf-8")
     df = preprocessor.preprocess(data)
 
+    format = ['dd/mm/yy - HH:MM 24 hours','mm/dd/yy - HH:MM 24 hours','mm/dd/yy - hh:mm am/pm','dd/mm/YYYY - hh:mm am/pm' ]
+    format.insert(0, 'Select file format')
+    selected_format = st.sidebar.selectbox("Select format", format)
     # fetch unique user
     user_list = df['user'].unique().tolist()
     user_list.remove('group_notification')
